@@ -1,7 +1,12 @@
 import { useContext } from "react"
-import type { Task } from "./App"
 import TaskItem from "./TaskItem"
 import { ThemeContext } from "../context/themeContext"
+
+export type Task = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 type TaskListProps = {
     tasks: Task[],

@@ -48,12 +48,12 @@ function ProductCard({ product }: ProductCardProps) {
 
       <CardActionArea
         component={Link}
-        to={`/product/${product.id}`}
+        to={`/products/${product.id}`}
         sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
       >
         {/* Фотокарточка */}
         <CardMedia
-          className="border-[3px] border-white border-b-[4px] border-b-double border-b-[#ffff00] object-cover [image-rendering:pixelated] contrast-[1.05] saturate-[1.3]"
+          className="border-[3px] border-white border-b-4 border-b-[#ffff00] [border-bottom-style:double] [image-rendering:pixelated] contrast-[1.05] saturate-[1.3]"
           component="img"
           alt={product.title}
           height="140"
