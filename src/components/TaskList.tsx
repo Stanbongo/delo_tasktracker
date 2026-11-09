@@ -1,29 +1,33 @@
-import { useContext } from "react";
-import { ThemeContext } from "../context/themeContext";
-
-import TaskItem from "./TaskItem";
-import type { Task } from "./App";
+import { useContext } from "react"
+import type { Task } from "./App"
+import TaskItem from "./TaskItem"
+import { ThemeContext } from "../context/themeContext"
 
 type TaskListProps = {
-  tasks: Task[];
-  onDelete: (id: string) => void;
-  onToggle: (id: string) => void;
-};
-
-function TaskList({ tasks, onDelete, onToggle }: TaskListProps) {
-  const { theme } = useContext(ThemeContext);
-  const content = tasks.map((task) => (
-    <TaskItem
-      key={task.id}
-      id={task.id}
-      title={task.title}
-      done={task.done}
-      onDelete={onDelete}
-      onToggle={onToggle}
-    />
-  ));
-
-  return <ul className={`todo-list theme-${theme}`}>{content}</ul>;
+    tasks: Task[],
+    deleteTask: (id: number) => void,
+    changeTask: (id: number) => void,
 }
 
-export default TaskList;
+function TaskList({ tasks, deleteTask, changeTask }: TaskListProps) {
+
+    // Пример получение данных из контекста, вместо props
+    const { theme } = useContext(ThemeContext)
+
+    return (
+        <div className={`todo-list todo-list-${theme}`}>
+            {tasks.map((task) => (
+                <TaskItem
+                    key={task.id}
+                    id={task.id}
+                    title={task.title}
+                    completed={task.completed}
+                    deleteTask={deleteTask}
+                    changeTask={changeTask}
+                />
+            ))}
+        </div>
+    )
+}
+
+export default TaskList

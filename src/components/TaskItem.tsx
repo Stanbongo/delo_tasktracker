@@ -1,28 +1,41 @@
+import { useContext } from "react";
+import { ThemeContext } from "../context/themeContext";
+
 type TaskItemProps = {
+  id: number;
   title: string;
-  done: boolean;
-  id: string;
-  onDelete: (id: string) => void;
-  onToggle: (id: string) => void;
+  completed: boolean;
+  deleteTask: (id: number) => void;
+  changeTask: (id: number) => void;
 };
 
-function TaskItem({ title, done, id, onDelete, onToggle }: TaskItemProps) {
+function TaskItem({
+  id,
+  title,
+  completed,
+  deleteTask,
+  changeTask,
+}: TaskItemProps) {
+  const { theme } = useContext(ThemeContext);
+
+  const deleteHandle = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    deleteTask(id);
+  };
+
+  const chandgeHandle = () => {
+    changeTask(id);
+  };
+
   return (
-    <li
-      onClick={() => onToggle(id)}
-      className={"todo-item" + (done ? " done" : "")}
+    <div
+      onClick={chandgeHandle}
+      className={`todo-item todo-item-${theme}`}
+      style={{ backgroundColor: completed ? "green" : "red" }}
     >
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete(id);
-        }}
-      >
-        X
-      </button>
       <h3>{title}</h3>
-      <p>{done + ""}</p>
-    </li>
+      <button onClick={deleteHandle}>X</button>
+    </div>
   );
 }
 

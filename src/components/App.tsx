@@ -1,56 +1,44 @@
-import Header from "./Header";
-import TaskList from "./TaskList";
-import AddForm from "./AddForm";
-import "./../App.css";
 import { useState } from "react";
+import "../index.css";
 import { ThemeContext } from "../context/themeContext";
+import { Navigate, Route, Routes } from "react-router";
+import TasksPage from "../pages/TasksPage";
+import AboutPage from "../pages/AboutPage";
+import Layout from "../Layout";
+import AuthLayout from "../AuthLayout";
+import ProductsPage from "../pages/ProductsPage";
+import ProductDetailPage from "../pages/ProductDetailPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
-export type Task = {
-  id: string;
-  title: string;
-  done: boolean;
-};
-
-const defaultTasks: Task[] = [
-  { id: "1", title: "Title 1", done: true },
-  { id: "2", title: "Title 2", done: true },
-  { id: "3", title: "Title 3", done: true },
-];
+import { StyledEngineProvider } from "@mui/material/styles";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  const addTask = (title: string) => {
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title: title,
-      done: false,
-    };
-
-    setTasks([...tasks, newTask]);
-  };
-
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  const handleToggle = (id: string) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task,
-      ),
-    );
-  };
-
+  // Создайте страницу AboutPage и вынесите его в route
+  // <h1>This is about page!</h1>
   return (
     <>
+      <StyledEngineProvider enableCssLayer>
+        {/* Ваше приложение, включая ThemeProvider */}
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<Navigate to={"/tasks"} replace />} />
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<h2>Login</h2>} />
+              <Route path="/register" element={<h2>Register</h2>} />
+            </Route>
+          </Routes>
+        </ThemeContext.Provider>
+      </StyledEngineProvider>
       {/* Provider - "облако", в которое мы помещаем состояние и сетСтейт для дочерних компонентов  */}
-      <ThemeContext.Provider value={{ theme, setTheme }}>
-        <Header />
-        <AddForm onSend={addTask} />
-        <TaskList tasks={tasks} onDelete={deleteTask} onToggle={handleToggle} />
-      </ThemeContext.Provider>
     </>
   );
 }
